@@ -8,13 +8,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build an image from Dockerfile
-        run: docker build -t DFE-Digital/funding-service-trivy-scan:${{ github.sha }} .
+        run: docker build -t funding-service-trivy-scan:${{ github.sha }} .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: 'DFE-Digital/funding-service-trivy-scan:${{ github.sha }}'
-          scan-type: 'image'
-          format: 'table'
-          exit-code: '1'
+          image-ref: funding-service-trivy-scan:${{ github.sha }}
+          format: table
+          exit-code: 1
           ignore-unfixed: true
-          severity: 'CRITICAL'
+          severity: CRITICAL

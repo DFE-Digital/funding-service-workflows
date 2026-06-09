@@ -1,0 +1,20 @@
+name: Audit - Trivy Container Scanning
+on: [workflow_call]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build an image from Dockerfile
+        run: docker build -t DFE-Digital/funding-service-trivy-scan:${{ github.sha }} .
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'DFE-Digital/funding-service-trivy-scan:${{ github.sha }}'
+          scan-type: 'image'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'

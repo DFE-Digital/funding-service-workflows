@@ -1,8 +1,7 @@
-name: Audit - Trivy Container Scanning
 on: [workflow_call]
 jobs:
   build:
-    name: Build
+    name: Audit - Trivy Container Scanning
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

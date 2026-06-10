@@ -1,9 +1,8 @@
-name: Audit - Node Runtime
-
 on: [workflow_call]
 
 jobs:
   audit:
+    name: Audit - NPM Dependency Scanning
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

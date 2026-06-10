@@ -5,7 +5,7 @@ on: [workflow_call]
 jobs:
   build:
     name: 'Build and Push to Github Container Registry'
-    
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -16,6 +16,10 @@ jobs:
     defaults:
       run:
         shell: bash
+
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
       - name: Checkout

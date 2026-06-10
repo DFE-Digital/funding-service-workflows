@@ -15,4 +15,5 @@ This repository is used as a central base for all workflows that are maintained 
 - We also recommend:
     - Using `secrets: inherit` for simplifying passing secrets where appropriate
     - Naming each job after its purpose rather than implementation; this makes life simpler if you want to change implementation in the future
+    - Use singular nouns for file names instead of plurals (e.g. dependency instead of dependencies)
     - Where relevant, aiming to use matrix strategies to run multiple jobs across many environments

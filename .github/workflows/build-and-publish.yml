@@ -1,13 +1,12 @@
 ---
-name: Build and Push to Github Container Registry
 
-on: 
-  workflow_call:
-    true
+name: Build and Push - Github Container Registry
+
+on: [workflow_call]  # yamllint disable-line rule:truthy
 
 jobs:
   build:
-    name: 'Build and Push to Github Container Registry'
+    name: 'Build and Push - Github Container Registry'
 
     runs-on: ubuntu-latest
 

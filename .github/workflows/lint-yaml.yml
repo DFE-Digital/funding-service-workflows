@@ -1,0 +1,20 @@
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  lint:
+    name: Lint - YAML Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c
+      
+      - run: echo ${{ steps.yaml-lint.outputs.logfile }}
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: yamllint-logfile
+          path: ${{ steps.yaml-lint.outputs.logfile }}

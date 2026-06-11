@@ -1,7 +1,7 @@
 ---
 name: Lint - YAML Syntax Check
 
-# For this workflow to properly work outside this repository, copy the .yamllint.yml 
+# For this workflow to properly work outside this repository, copy the .yamllint.yml
 # file in the root directory into the root of your repository
 
 on: [workflow_call]  # yamllint disable-line rule:truthy
@@ -14,8 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
+      - name: Checkout YAML Configuration
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          repository: DFE-Digital/funding-service-workflows
+          path: yaml-config
+
       - name: Install yamllint
         run: pip install yamllint
 
       - name: Lint YAML files
-        run: yamllint .
+        run: yamllint -c yaml-config/.yamllint.yml .

@@ -1,5 +1,4 @@
 ---
-
 name: Build and Push - Github Container Registry
 
 on: [workflow_call]  # yamllint disable-line rule:truthy

@@ -1,5 +1,4 @@
 ---
-
 name: Lint - YAML Syntax Check
 
 on: [workflow_call]  # yamllint disable-line rule:truthy

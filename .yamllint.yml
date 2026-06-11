@@ -22,3 +22,6 @@ rules:
     allow-non-breakable-inline-mappings: true
   octal-values:
     forbid-implicit-octal: true
+  quoted-strings:
+    quote-type: consistent
+    required: only-when-needed

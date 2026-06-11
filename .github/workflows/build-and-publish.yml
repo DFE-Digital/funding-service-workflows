@@ -1,6 +1,9 @@
+---
 name: Build and Push to Github Container Registry
 
-on: [workflow_call]
+on: 
+  workflow_call:
+    true
 
 jobs:
   build:

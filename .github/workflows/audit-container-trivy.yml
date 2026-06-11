@@ -1,4 +1,9 @@
-on: [workflow_call]
+---
+
+on: 
+  workflow_call:
+    true
+
 jobs:
   build:
     name: Audit - Trivy Container Scanning

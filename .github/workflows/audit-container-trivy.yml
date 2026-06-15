@@ -15,7 +15,7 @@ on:
         default: Dockerfile
         type: string
     secrets:
-      build_args:
+      buildArgs:
         description: Build arguments to pass to the Docker build command (optional). You must pass the flag in the format --build-arg ARG_NAME=ARG_VALUE. Multiple build arguments can be passed by separating them with spaces.
         required: false
 

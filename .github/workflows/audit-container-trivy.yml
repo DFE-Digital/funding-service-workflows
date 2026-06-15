@@ -9,6 +9,11 @@ on:
         required: false
         default: "."
         type: string
+      dockerfilePath:
+        description: "The path to the Dockerfile to use for the build (default: Dockerfile)"
+        required: false
+        default: "Dockerfile"
+        type: string
 
 jobs:
   build:
@@ -19,7 +24,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
       - name: Build an image from Dockerfile
-        run: docker build -t funding-service-trivy-scan:${{ github.sha }} ${{ inputs.context }}
+        run: docker build -t funding-service-trivy-scan:${{ github.sha }} -f ${{ inputs.dockerfilePath }} ${{ inputs.context }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25

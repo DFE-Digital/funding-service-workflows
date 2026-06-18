@@ -11,6 +11,7 @@ on:
         description: The branch to run yamllint on
         required: false
         default: main
+        type: string
 
 jobs:
   lint:

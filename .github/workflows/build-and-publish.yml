@@ -1,23 +1,24 @@
 ---
 name: Build and Push - Github Container Registry
 
-on:
+on: # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
       context:
-        description: "The context to use for the Docker build (default: current directory)"
+        description: 'The context to use for the Docker build (default: current directory)'
         required: false
         default: .
         type: string
       dockerfilePath:
-        description: "The path to the Dockerfile to use for the build (default: Dockerfile)"
+        description: 'The path to the Dockerfile to use for the build (default: Dockerfile)'
         required: false
         default: Dockerfile
         type: string
     secrets:
       buildArgs:
         description: Build arguments to pass to the Docker build command (optional).
-                     Do *not* include the --build-arg flag in the value. Multiple build arguments can be passed by separating them with spaces.
+                     Do *not* include the --build-arg flag in the value. 
+                     Multiple build arguments can be passed by separating them with spaces.
         required: false
 
 jobs:

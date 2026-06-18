@@ -16,7 +16,9 @@ on:
         type: string
     secrets:
       buildArgs:
-        description: Build arguments to pass to the Docker build command (optional). You must pass the flag in the format --build-arg ARG_NAME=ARG_VALUE. Multiple build arguments can be passed by separating them with spaces.
+        description: Build arguments to pass to the Docker build command (optional). 
+                    You must pass the flag in the format --build-arg ARG_NAME=ARG_VALUE. 
+                    Multiple build arguments can be passed by separating them with spaces.
         required: false
 
 jobs:
@@ -28,7 +30,8 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
       - name: Build an image from Dockerfile
-        run: docker build -t funding-service-trivy-scan:${{ github.sha }} -f ${{ inputs.dockerfilePath }} ${{ secrets.buildArgs }} ${{ inputs.context }}
+        run: docker build -t funding-service-trivy-scan:${{ github.sha }} -f ${{ inputs.dockerfilePath }} 
+          ${{ secrets.buildArgs }} ${{ inputs.context }} 
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25

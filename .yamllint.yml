@@ -23,5 +23,5 @@ rules:
   octal-values:
     forbid-implicit-octal: true
   quoted-strings:
-    quote-type: double
+    quote-type: single
     required: only-when-needed

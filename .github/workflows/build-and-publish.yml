@@ -1,12 +1,29 @@
 ---
 name: Build and Push - Github Container Registry
 
-on: [workflow_call]  # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      context:
+        description: 'The context to use for the Docker build (default: current directory)'
+        required: false
+        default: .
+        type: string
+      dockerfilePath:
+        description: 'The path to the Dockerfile to use for the build (default: Dockerfile)'
+        required: false
+        default: Dockerfile
+        type: string
+    secrets:
+      buildArgs:
+        description: Build arguments to pass to the Docker build command (optional).
+                     Do *not* include the --build-arg flag in the value.
+                     Multiple build arguments can be passed by separating them with spaces.
+        required: false
 
 jobs:
   build:
     name: Build and Push - Github Container Registry
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -46,7 +63,9 @@ jobs:
         id: push
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf
         with:
-          context: .
+          context: ${{ inputs.context }}
+          file: ${{ inputs.dockerfilePath }}
+          build-args: ${{ secrets.buildArgs }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

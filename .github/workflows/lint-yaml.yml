@@ -4,7 +4,7 @@ name: Lint - YAML Syntax Check
 # For this workflow to properly work outside this repository, copy the .yamllint.yml
 # file in the root directory into the root of your repository
 
-on: 
+on:
   workflow_call:
     inputs:
       yamllintBranch:  # yamllint disable-line rule:truthy

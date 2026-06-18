@@ -5,12 +5,12 @@ on:
   workflow_call:
     inputs:
       context:
-        description: "The context to use for the Docker build (default: current directory)"
+        description: 'The context to use for the Docker build (default: current directory)'
         required: false
         default: .
         type: string
       dockerfilePath:
-        description: "The path to the Dockerfile to use for the build (default: Dockerfile)"
+        description: 'The path to the Dockerfile to use for the build (default: Dockerfile)'
         required: false
         default: Dockerfile
         type: string

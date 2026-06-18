@@ -16,7 +16,7 @@ on:
         type: string
     secrets:
       buildArgs:
-        description: Build arguments to pass to the Docker build command (optional). 
+        description: Build arguments to pass to the Docker build command (optional).
                      Do *not* include the --build-arg flag in the value. Multiple build arguments can be passed by separating them with spaces.
         required: false
 

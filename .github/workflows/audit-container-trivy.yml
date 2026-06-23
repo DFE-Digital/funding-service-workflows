@@ -19,13 +19,7 @@ on:  # yamllint disable-line rule:truthy
         description: Build arguments to pass to the Docker build command (optional).
                      You must pass the flag in the format ARG_NAME=ARG_VALUE.
                      Multiple build arguments can be passed by separating them with spaces.
-        required: false
-        default: 'NOARGSGIVEN=NOARGSGIVEN'
-
-env:
-  dockerfilePath: ${{ inputs.dockerfilePath }}
-  buildArgs: ${{ secrets.buildArgs }}
-  context: ${{ inputs.context }}
+        required: true
 
 jobs:
   build:
@@ -35,9 +29,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
-      - name: Build an image from Dockerfile
-        run: docker build -t funding-service-trivy-scan:${{ github.sha }} -f ${{ env.dockerfilePath }}
-             --build-arg ${{ env.buildArgs }} ${{ env.context }}
+      - name: Build Docker image
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf
+        with:
+          context: ${{ inputs.context }}
+          file: ${{ inputs.dockerfilePath }}
+          build-args: ${{ secrets.buildArgs }}
+          load: true  # This stops the image being pushed to a registry, and instead loads it into the local Docker daemon for scanning
+          tags: funding-service-trivy-scan:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25

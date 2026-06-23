@@ -66,11 +66,11 @@ jobs:
 
       - name: Run tests
         if: ${{ inputs.filter != '' }}
-        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" --filter ${{ env.filterCommand }} {{ env.solutionPath }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" --filter ${{ env.filterCommand }} ${{ env.solutionPath }}
 
       - name: Run tests
         if: ${{ inputs.filter == '' }}
-        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" {{ env.solutionPath }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" ${{ env.solutionPath }}
 
       - name: Set UUID
         if: ${{ success() || failure() }}

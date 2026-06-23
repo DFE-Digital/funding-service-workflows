@@ -54,7 +54,7 @@ jobs:
         run: dotnet --version
 
       - name: Run tests
-        run: dotnet test -c Release -l trx --results-directory 'artifacts/tests/output' ${{ env.filterCommand }}
+        run: dotnet test -c Release -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" --configuration Release ${{ env.filterCommand }}
 
       - name: Set UUID
         if: ${{ success() || failure() }}

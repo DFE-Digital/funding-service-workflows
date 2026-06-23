@@ -58,7 +58,7 @@ jobs:
 
       - name: Run package audit
         run:  |
-              dotnet list package --vulnerable --include-transitive 2>&1 | tee build.log
+              dotnet list package --vulnerable --include-transitive --project ${{ env.solutionPath }} 2>&1 | tee build.log
               echo 'Analyse dotnet list package command log output...'
               if grep -q -i 'critical\|high' build.log; 
               then

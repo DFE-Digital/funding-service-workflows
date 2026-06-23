@@ -4,6 +4,10 @@ name: Audit - Dependency Scanning - NPM
 on:  # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
+      solution:
+        description: The path to the solution file to test (e.g., src/MyProject.sln)
+        required: true
+        type: string
       dotnetVersion:
         description: 'The version of the .NET SDK to use for the tests (default: 8.0.x)'
         required: false
@@ -25,6 +29,9 @@ on:  # yamllint disable-line rule:truthy
         description: 'The Personal Access Token (PAT) for accessing the private NuGet feed.'
         required: false
 
+env:
+  solutionPath: ${{ inputs.solution }}
+
 jobs:
   test:
     name: Tests - .NET
@@ -45,6 +52,9 @@ jobs:
       # Note: Your global.json must specify your input version of dotnet, otherwise the setup-dotnet action will not use the correct dotnet version.
       - name: Display dotnet version
         run: dotnet --version
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.solutionPath }}
 
       - name: Run package audit
         run:  |

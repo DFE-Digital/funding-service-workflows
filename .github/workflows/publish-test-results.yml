@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download test artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           path: artifacts/tests/output
           pattern: '**/*.trx'  # Adjust the pattern to match your test result files
 
       - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        uses: EnricoMi/publish-unit-test-result-action/linux@d0a4676d0e0b938bc201470d88276b7c74c712b3
         if: ${{ success() || failure() }}
         with:
           files: artifacts/tests/output/**/*.trx  # Path to downloaded test results

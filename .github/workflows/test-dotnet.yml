@@ -52,7 +52,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
 
       - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2
         with:
           dotnet-version: ${{ inputs.dotnetVersion }}
           source-url: ${{ inputs.nugetSourceUrl }}
@@ -78,7 +78,7 @@ jobs:
         uses: filipstefansson/uuid-action@v1
 
       - name: Upload test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ success() || failure() }}
         with:
           name: test-results-${{ steps.generate-uuid.outputs.uuid }}

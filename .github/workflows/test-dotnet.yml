@@ -1,0 +1,69 @@
+---
+name: Tests - .NET
+
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      filter:  
+        description: Applies a filter to the test run. For example, to run only tests in a specific namespace or class, you can use a filter such as TestCategory=Unit
+        required: false
+        type: string
+      dotnetVersion:
+        description: 'The version of the .NET SDK to use for the tests (default: 8.0.x)'
+        required: false
+        default: 8.0.x
+        type: string
+      nugetSourceUrl:
+        description: 'The URL of the NuGet source to use for restoring packages (default: https://api.nuget.org/v3/index.json)'
+        required: false
+        default: https://api.nuget.org/v3/index.json
+        type: string
+      enableCache:
+        description: 'Whether to enable caching for the .NET SDK (default: false). Enabling caching can speed up the workflow by reusing previously downloaded packages and dependencies, but requires
+                      a package lock file to be present in the repository.'
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      nugetAuthToken:
+        description: 'The Personal Access Token (PAT) for accessing the private NuGet feed.'
+        required: false
+
+env:
+  filterCommand: --filter ${{ inputs.filter }}
+
+jobs:
+  test:
+    name: Tests - .NET
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnetVersion }}
+          source-url: ${{ inputs.nugetSourceUrl }}
+          cache: ${{ inputs.enableCache }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.nugetAuthToken }}
+
+      # Note: Your global.json must specify your input version of dotnet, otherwise the setup-dotnet action will not use the correct dotnet version.
+      - name: Display dotnet version
+        run: dotnet --version
+
+      - name: Run tests
+        run: dotnet test -c Release -l trx --results-directory 'artifacts/tests/output' ${{ env.filterCommand }}
+
+      - name: Set UUID
+        if: ${{ success() || failure() }}
+        id: generate-uuid
+        uses: filipstefansson/uuid-action@v1
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ success() || failure() }}
+        with:
+          name: test-results-${{ steps.generate-uuid.outputs.uuid }}
+          path: artifacts/tests/output/**

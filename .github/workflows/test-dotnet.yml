@@ -4,6 +4,10 @@ name: Tests - .NET
 on:  # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
+      solution:
+        description: The path to the solution file to test (e.g., src/MyProject.sln)
+        required: true
+        type: string
       filter:  
         description: Applies a filter to the test run. For example, to run only tests in a specific namespace or class, you can use a filter such as TestCategory=Unit
         required: false
@@ -24,13 +28,20 @@ on:  # yamllint disable-line rule:truthy
         required: false
         default: false
         type: boolean
+      configuration:
+        description: 'The build configuration to use for the tests (default: Release)'
+        required: false
+        default: Release
+        type: string
     secrets:
       nugetAuthToken:
         description: 'The Personal Access Token (PAT) for accessing the private NuGet feed.'
         required: false
 
 env:
-  filterCommand: --filter ${{ inputs.filter }}
+  filterCommand: ${{ inputs.filter }}
+  solutionPath: ${{ inputs.solution }}
+  configuration: ${{ inputs.configuration }}
 
 jobs:
   test:
@@ -54,7 +65,12 @@ jobs:
         run: dotnet --version
 
       - name: Run tests
-        run: dotnet test -c Release -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" ${{ env.filterCommand }}
+        if: ${{ inputs.filter != '' }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" --filter ${{ env.filterCommand }} {{ env.solutionPath }}
+
+      - name: Run tests
+        if: ${{ inputs.filter == '' }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' --collect "Code coverage" {{ env.solutionPath }}
 
       - name: Set UUID
         if: ${{ success() || failure() }}

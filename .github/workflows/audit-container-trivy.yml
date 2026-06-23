@@ -19,7 +19,7 @@ on:  # yamllint disable-line rule:truthy
         description: Build arguments to pass to the Docker build command (optional).
                      You must pass the flag in the format ARG_NAME=ARG_VALUE.
                      Multiple build arguments can be passed by separating them with spaces.
-        required: true
+        required: false
 
 jobs:
   build:

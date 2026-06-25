@@ -83,7 +83,7 @@ jobs:
       - name: Set UUID
         if: ${{ success() || failure() }}
         id: generate-uuid
-        uses: filipstefansson/uuid-action@v1
+        uses: filipstefansson/uuid-action@ce29ebbb0981ac2448c2e406e848bfaa30ddf04c
 
       - name: Upload test artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

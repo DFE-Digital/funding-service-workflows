@@ -1,0 +1,93 @@
+---
+name: Tests - .NET
+
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      solution:
+        description: The path to the solution file to test (e.g., src/MyProject.sln)
+        required: true
+        type: string
+      filter:
+        description: Applies a filter to the test run.
+                     For example, to run only tests in a specific namespace or class,
+                     you can use a filter such as TestCategory=Unit
+        required: false
+        type: string
+      dotnetVersion:
+        description: 'The version of the .NET SDK to use for the tests (default: 8.0.x)'
+        required: false
+        default: 8.0.x
+        type: string
+      nugetSourceUrl:
+        description: 'The URL of the NuGet source to use for restoring packages
+                      (default: https://api.nuget.org/v3/index.json)'
+        required: false
+        default: https://api.nuget.org/v3/index.json
+        type: string
+      enableCache:
+        description: 'Whether to enable caching for the .NET SDK (default: false).
+                      Enabling caching can speed up the workflow by reusing previously downloaded
+                      packages and dependencies, but requires a package lock file to be
+                      present in the repository.'
+        required: false
+        default: false
+        type: boolean
+      configuration:
+        description: 'The build configuration to use for the tests (default: Release)'
+        required: false
+        default: Release
+        type: string
+    secrets:
+      nugetAuthToken:
+        description: The Personal Access Token (PAT) for accessing the private NuGet feed.
+        required: false
+
+env:
+  filterCommand: ${{ inputs.filter }}
+  solutionPath: ${{ inputs.solution }}
+  configuration: ${{ inputs.configuration }}
+
+jobs:
+  test:
+    name: Tests - .NET
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2
+        with:
+          dotnet-version: ${{ inputs.dotnetVersion }}
+          source-url: ${{ inputs.nugetSourceUrl }}
+          cache: ${{ inputs.enableCache }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.nugetAuthToken }}
+
+      # Note: Your global.json must specify your input version of dotnet,
+      # otherwise the setup-dotnet action will not use the correct dotnet version.
+      - name: Display dotnet version
+        run: dotnet --version
+
+      - name: Run tests
+        if: ${{ inputs.filter != '' }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output'
+             --collect "Code coverage" --filter ${{ env.filterCommand }} ${{ env.solutionPath }}
+
+      - name: Run tests
+        if: ${{ inputs.filter == '' }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output'
+             --collect "Code coverage" ${{ env.solutionPath }}
+
+      - name: Set UUID
+        if: ${{ success() || failure() }}
+        id: generate-uuid
+        uses: filipstefansson/uuid-action@v1
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: ${{ success() || failure() }}
+        with:
+          name: test-results-${{ steps.generate-uuid.outputs.uuid }}
+          path: artifacts/tests/output/**

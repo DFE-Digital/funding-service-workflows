@@ -2,6 +2,22 @@
 
 This repository is used as a central base for all workflows that are maintained and used by funding service repositories.
 
+## Currently Provided Flows
+
+### Audit
+
+- `audit-container-trivy.yml`: Analyses container images for security issues
+- `audit-dependency-npm.yml`: Analyses NPM Packages
+
+### Linting
+
+- `lint-yaml.yml`: Lints any YAML files to the spec found in .yamllint.yml
+
+### Testing
+
+- `test-dotnet.yml`: Runs a dotnet testrunner for a given solution
+- `publish-test-results.yml`: Compiles .trx test file outputs into an easy-read summary for github actions
+
 ## For Workflow Developers
 
 ### Standards

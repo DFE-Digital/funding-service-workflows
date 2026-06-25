@@ -83,11 +83,11 @@ jobs:
       - name: Set UUID
         if: ${{ success() || failure() }}
         run: | 
-            echo "generated-uuid::$(uuidgen)" >> $GITHUB_ENV
+            echo "generatedUuid::$(uuidgen)" >> $GITHUB_ENV
 
       - name: Upload test artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ success() || failure() }}
         with:
-          name: test-results-${{ generated-uuid }}
+          name: test-results-$generatedUuid
           path: artifacts/tests/output/**

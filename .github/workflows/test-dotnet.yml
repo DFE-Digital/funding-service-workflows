@@ -83,8 +83,7 @@ jobs:
       - name: Set UUID
         if: ${{ success() || failure() }}
         id: generate-uuid
-        run: | 
-            echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "::set-output name=uuid::$(uuidgen)"
 
       - name: Upload test artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

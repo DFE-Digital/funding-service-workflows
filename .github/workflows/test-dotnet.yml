@@ -9,9 +9,9 @@ on:  # yamllint disable-line rule:truthy
         required: true
         type: string
       filter:
-        description: Applies a filter to the test run. 
-          For example, to run only tests in a specific namespace or class, 
-          you can use a filter such as TestCategory=Unit
+        description: Applies a filter to the test run.
+                     For example, to run only tests in a specific namespace or class,
+                     you can use a filter such as TestCategory=Unit
         required: false
         type: string
       dotnetVersion:
@@ -26,8 +26,10 @@ on:  # yamllint disable-line rule:truthy
         default: https://api.nuget.org/v3/index.json
         type: string
       enableCache:
-        description: 'Whether to enable caching for the .NET SDK (default: false). Enabling caching can speed up the workflow by reusing previously downloaded packages and dependencies, but requires
-                      a package lock file to be present in the repository.'
+        description: 'Whether to enable caching for the .NET SDK (default: false).
+                      Enabling caching can speed up the workflow by reusing previously downloaded
+                      packages and dependencies, but requires a package lock file to be
+                      present in the repository.'
         required: false
         default: false
         type: boolean
@@ -63,20 +65,20 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.nugetAuthToken }}
 
-      # Note: Your global.json must specify your input version of dotnet, 
+      # Note: Your global.json must specify your input version of dotnet,
       # otherwise the setup-dotnet action will not use the correct dotnet version.
       - name: Display dotnet version
         run: dotnet --version
 
       - name: Run tests
         if: ${{ inputs.filter != '' }}
-        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' 
-          --collect "Code coverage" --filter ${{ env.filterCommand }} ${{ env.solutionPath }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output'
+             --collect "Code coverage" --filter ${{ env.filterCommand }} ${{ env.solutionPath }}
 
       - name: Run tests
         if: ${{ inputs.filter == '' }}
-        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output' 
-          --collect "Code coverage" ${{ env.solutionPath }}
+        run: dotnet test -c ${{ env.configuration }} -l trx --results-directory 'artifacts/tests/output'
+             --collect "Code coverage" ${{ env.solutionPath }}
 
       - name: Set UUID
         if: ${{ success() || failure() }}

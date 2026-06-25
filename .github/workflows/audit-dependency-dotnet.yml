@@ -14,13 +14,15 @@ on:  # yamllint disable-line rule:truthy
         default: 8.0.x
         type: string
       nugetSourceUrl:
-        description: 'The URL of the NuGet source to use for restoring packages (default: https://api.nuget.org/v3/index.json)'
+        description: 'The URL of the NuGet source to use for restoring packages 
+          (default: https://api.nuget.org/v3/index.json)'
         required: false
         default: https://api.nuget.org/v3/index.json
         type: string
       enableCache:
-        description: 'Whether to enable caching for the .NET SDK (default: false). Enabling caching can speed up the workflow by reusing previously downloaded packages and dependencies, but requires
-                      a package lock file to be present in the repository.'
+        description: 'Whether to enable caching for the .NET SDK (default: false). 
+          Enabling caching can speed up the workflow by reusing previously downloaded packages 
+          and dependencies, but requires a package lock file to be present in the repository.'
         required: false
         default: false
         type: boolean
@@ -49,7 +51,8 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.nugetAuthToken }}
 
-      # Note: Your global.json must specify your input version of dotnet, otherwise the setup-dotnet action will not use the correct dotnet version.
+      # Note: Your global.json must specify your input version of dotnet, 
+      # otherwise the setup-dotnet action will not use the correct dotnet version.
       - name: Display dotnet version
         run: dotnet --version
 
@@ -57,7 +60,7 @@ jobs:
         run: dotnet restore ${{ env.solutionPath }}
 
       - name: Run package audit
-        # yamllint disable indentation
+        # yamllint disable rule:indentation
         run: |
           dotnet list ${{ env.solutionPath }} package --vulnerable --include-transitive 2>&1 | tee build.log
           echo 'Analyse dotnet list package command log output...'
@@ -68,4 +71,4 @@ jobs:
           else
               echo 'No critical or high severity vulnerabilities found.'
               exit 0
-        # yamllint enable indentation
+        # yamllint enable rule:indentation

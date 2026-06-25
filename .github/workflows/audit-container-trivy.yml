@@ -35,7 +35,7 @@ jobs:
           context: ${{ inputs.context }}
           file: ${{ inputs.dockerfilePath }}
           build-args: ${{ secrets.buildArgs }}
-          load: true  # This stops the image being pushed to a registry, and instead loads it into the local Docker daemon for scanning
+          load: true  # This stops the image being pushed to a registry and just pushes locally
           tags: funding-service-trivy-scan:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner

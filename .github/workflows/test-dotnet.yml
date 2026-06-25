@@ -20,8 +20,8 @@ on:  # yamllint disable-line rule:truthy
         default: 8.0.x
         type: string
       nugetSourceUrl:
-        description: 'The URL of the NuGet source to use for restoring packages 
-          (default: https://api.nuget.org/v3/index.json)'
+        description: 'The URL of the NuGet source to use for restoring packages
+                     (default: https://api.nuget.org/v3/index.json)'
         required: false
         default: https://api.nuget.org/v3/index.json
         type: string

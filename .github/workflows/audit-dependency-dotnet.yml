@@ -15,14 +15,14 @@ on:  # yamllint disable-line rule:truthy
         type: string
       nugetSourceUrl:
         description: 'The URL of the NuGet source to use for restoring packages
-                     (default: https://api.nuget.org/v3/index.json)'
+                      (default: https://api.nuget.org/v3/index.json)'
         required: false
         default: https://api.nuget.org/v3/index.json
         type: string
       enableCache:
         description: 'Whether to enable caching for the .NET SDK (default: false).
-                     Enabling caching can speed up the workflow by reusing previously downloaded packages
-                     and dependencies, but requires a package lock file to be present in the repository.'
+                      Enabling caching can speed up the workflow by reusing previously downloaded packages
+                      and dependencies, but requires a package lock file to be present in the repository.'
         required: false
         default: false
         type: boolean

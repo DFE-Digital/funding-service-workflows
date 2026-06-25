@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
         description: The path to the solution file to test (e.g., src/MyProject.sln)
         required: true
         type: string
-      filter:  
+      filter:
         description: Applies a filter to the test run. For example, to run only tests in a specific namespace or class, you can use a filter such as TestCategory=Unit
         required: false
         type: string
@@ -35,7 +35,7 @@ on:  # yamllint disable-line rule:truthy
         type: string
     secrets:
       nugetAuthToken:
-        description: 'The Personal Access Token (PAT) for accessing the private NuGet feed.'
+        description: The Personal Access Token (PAT) for accessing the private NuGet feed.
         required: false
 
 env:

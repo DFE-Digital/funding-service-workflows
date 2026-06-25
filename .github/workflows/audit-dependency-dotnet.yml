@@ -69,4 +69,3 @@ jobs:
               echo 'No critical or high severity vulnerabilities found.'
               exit 0
         # yamllint enable indentation
-          

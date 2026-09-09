@@ -1,0 +1,64 @@
+---
+name: Create Deployment Pull Request
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      imageName:
+        description: The name of the container image to update the in deployment file.
+        required: true
+        type: string
+      imageTag:
+        description: Image tag to deploy
+        required: true
+        type: string
+
+      deploymentPath:
+        description: Path to the Kubernetes deployment file to update
+        required: false  # Defaults to the standard deployment path, but can overriden by the calling workflow if needed
+        default: CICD/deployment.yaml
+        type: string
+
+      baseBranch:
+        description: The base branch to create the PR against
+        required: false
+        default: main
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.baseBranch }}
+
+      - name: Update image tag
+        env:
+          IMAGE_NAME: ${{ inputs.imageName }}
+          IMAGE_TAG: ${{ inputs.imageTag }}
+          DEPLOYMENT_PATH: ${{ inputs.deploymentPath }}
+        run: |
+          echo "Updating ${IMAGE_NAME} to ${IMAGE_TAG}"
+
+          sed -i \
+          "s|${IMAGE_NAME}:[^[:space:]]*|${IMAGE_NAME}:${IMAGE_TAG}|" \
+          "${DEPLOYMENT_PATH}"
+
+      - name: Create deployment PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: ${{ inputs.baseBranch }}
+          branch: deploy/${{ inputs.imageTag }}
+          commit-message: Update image tag to ${{ inputs.imageTag }}
+          title: Deploy ${{ inputs.imageName }} ${{ inputs.imageTag }}
+          body: |
+            Updates `${{ inputs.deploymentPath }}` to use the image:
+            `${{ inputs.imageName }}:${{ inputs.imageTag }}`
+          add-paths: |
+            ${{ inputs.deploymentPath }}

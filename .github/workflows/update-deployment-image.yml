@@ -1,13 +1,12 @@
 ---
 name: Create Deployment Pull Request
-on: # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
   workflow_call:
     inputs:
       imageName:
         description: The name of the container image to update the in deployment file.
         required: true
         type: string
-      
       imageTag:
         description: Image tag to deploy
         required: true
@@ -50,7 +49,7 @@ jobs:
           sed -i \
           "s|${IMAGE_NAME}:[^[:space:]]*|${IMAGE_NAME}:${IMAGE_TAG}|" \
           "${DEPLOYMENT_PATH}"
-          
+
       - name: Create deployment PR
         uses: peter-evans/create-pull-request@v7
         with:
@@ -63,4 +62,3 @@ jobs:
             `${{ inputs.imageName }}:${{ inputs.imageTag }}`
           add-paths: |
             ${{ inputs.deploymentPath }}
-            
